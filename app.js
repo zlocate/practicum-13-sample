@@ -1,7 +1,5 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
-const morgan = require('morgan');
 
 const {
   PORT = 3000,
@@ -9,8 +7,8 @@ const {
 
 const app = express();
 
-app.use(morgan('tiny'));
-app.use(bodyParser.json());
+
+app.use(express.json());
 
 app.use((req, res, next) => {
   req.user = {
