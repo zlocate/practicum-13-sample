@@ -1,22 +1,20 @@
 lockfileVersion: 5.3
 
 specifiers:
-  body-parser: ^1.19.0
   eslint: ^7.2.0
-  eslint-config-airbnb: ^18.2.0
+  eslint-config-airbnb-base: ^15.0.0
   eslint-plugin-import: ^2.22.1
   express: ^4.17.1
   mongoose: ^5.10.9
   nodemon: ^2.0.4
 
 dependencies:
-  body-parser: 1.19.1
   express: 4.17.2
   mongoose: 5.13.14
 
 devDependencies:
   eslint: 7.32.0
-  eslint-config-airbnb: 18.2.1_157002f9dff1b62f2b20650d7e8bf1eb
+  eslint-config-airbnb-base: 15.0.0_157002f9dff1b62f2b20650d7e8bf1eb
   eslint-plugin-import: 2.25.4_eslint@7.32.0
   nodemon: 2.0.15
 
@@ -630,35 +628,19 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /eslint-config-airbnb-base/14.2.1_157002f9dff1b62f2b20650d7e8bf1eb:
-    resolution: {integrity: sha512-GOrQyDtVEc1Xy20U7vsB2yAoB4nBlfH5HZJeatRXHleO+OS5Ot+MWij4Dpltw4/DyIkqUfqz1epfhVR5XWWQPA==}
-    engines: {node: '>= 6'}
+  /eslint-config-airbnb-base/15.0.0_157002f9dff1b62f2b20650d7e8bf1eb:
+    resolution: {integrity: sha512-xaX3z4ZZIcFLvh2oUNvcX5oEofXda7giYmuplVxoOg5A7EXJMrUyqRgR+mhDhPK8LZ4PttFOBvCYDbX3sUoUig==}
+    engines: {node: ^10.12.0 || >=12.0.0}
     peerDependencies:
-      eslint: ^5.16.0 || ^6.8.0 || ^7.2.0
-      eslint-plugin-import: ^2.22.1
+      eslint: ^7.32.0 || ^8.2.0
+      eslint-plugin-import: ^2.25.2
     dependencies:
       confusing-browser-globals: 1.0.11
       eslint: 7.32.0
       eslint-plugin-import: 2.25.4_eslint@7.32.0
       object.assign: 4.1.2
       object.entries: 1.1.5
-    dev: true
-
-  /eslint-config-airbnb/18.2.1_157002f9dff1b62f2b20650d7e8bf1eb:
-    resolution: {integrity: sha512-glZNDEZ36VdlZWoxn/bUR1r/sdFKPd1mHPbqUtkctgNG4yT2DLLtJ3D+yCV+jzZCc2V1nBVkmdknOJBZ5Hc0fg==}
-    engines: {node: '>= 6'}
-    peerDependencies:
-      eslint: ^5.16.0 || ^6.8.0 || ^7.2.0
-      eslint-plugin-import: ^2.22.1
-      eslint-plugin-jsx-a11y: ^6.4.1
-      eslint-plugin-react: ^7.21.5
-      eslint-plugin-react-hooks: ^4 || ^3 || ^2.3.0 || ^1.7.0
-    dependencies:
-      eslint: 7.32.0
-      eslint-config-airbnb-base: 14.2.1_157002f9dff1b62f2b20650d7e8bf1eb
-      eslint-plugin-import: 2.25.4_eslint@7.32.0
-      object.assign: 4.1.2
-      object.entries: 1.1.5
+      semver: 6.3.0
     dev: true
 
   /eslint-import-resolver-node/0.3.6:
