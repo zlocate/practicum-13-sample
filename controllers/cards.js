@@ -1,97 +1,88 @@
-const mongoose = require('mongoose');
 const Card = require('../models/card');
 
-module.exports.getCards = (_, res) => {
+exports.getCards = (req, res) => {
   Card.find({})
-    .populate('owner')
-    .populate('likes')
-    .then((cards) => res.send({ data: cards }))
+    .then((cards) => {
+      if (cards.length >= 1) {
+        res.send(cards);
+      } else {
+        res.status(404).send({ message: 'Карточки не найдены' });
+      }
+    })
     .catch(() => res.status(500).send({ message: 'На сервере произошла ошибка' }));
 };
 
-module.exports.postCard = (req, res) => {
+exports.createCard = (req, res) => {
+  const owner = req.user._id;
   const { name, link } = req.body;
-  const { _id } = req.user;
-  Card.create({ name, link, owner: _id })
-    .then((card) => res.send({ data: card }))
+
+  Card.create({ name, link, owner })
+    .then((card) => res.send(card))
     .catch((err) => {
-      if (err instanceof mongoose.Error.ValidationError) {
-        res.status(400).send({ message: err.message });
+      if (err.name === 'ValidationError') {
+        res.status(400).send({ message: 'Переданы некорректные данные' });
       } else {
         res.status(500).send({ message: 'На сервере произошла ошибка' });
       }
     });
 };
 
-module.exports.deleteCard = (req, res) => {
-  Card.deleteOne({ _id: req.params.cardId })
-    .then((data) => {
-      if (data.ok !== 1) {
-        res.status(500).send({ message: 'На сервере произошла ошибка' });
-        return;
-      }
-      if (data.deletedCount === 1) {
-        res.send({ message: 'Карта успешно удалена' });
-      } else {
-        res.status(404).send({ message: `Карта с id ${req.params.cardId} не найдена!` });
-      }
-    }).catch((err) => {
-      if (err instanceof mongoose.Error.CastError) {
-        res.status(400).send({ message: `Передан некорректный идентификатор ${req.params.cardId}` });
-      } else {
-        res.status(500).send({ message: 'На сервере произошла ошибка' });
-      }
-    });
-};
-
-module.exports.likeCard = (req, res) => {
-  const { _id } = req.user;
-  Card.findByIdAndUpdate(
-    req.params.cardId,
-    { $addToSet: { likes: _id } }, // добавить _id в массив, если его там нет
-    { new: true },
-  ).populate('owner').populate('likes')
+exports.deleteCard = (req, res) => {
+  Card.findByIdAndRemove(req.params.cardId)
     .then((card) => {
       if (card) {
-        res.send({ data: card });
+        res.send(card);
       } else {
-        res.status(404).send({ message: `Карта с id ${req.params.cardId} не найдена!` });
+        res.status(404).send({ message: 'Карточка не найдена' });
       }
     })
     .catch((err) => {
-      if (err instanceof mongoose.Error.CastError) {
-        if (err.path === '_id') {
-          res.status(400).send({ message: `Передан некорректный идентификатор ${req.params.cardId}` });
-        } else {
-          res.status(400).send({ message: `Передан некорректный идентификатор ${_id}` });
-        }
+      if (err.name === 'CastError') {
+        res.status(400).send({ message: 'Переданы некорректные данные' });
       } else {
         res.status(500).send({ message: 'На сервере произошла ошибка' });
       }
     });
 };
 
-module.exports.dislikeCard = (req, res) => {
-  const { _id } = req.user;
+exports.likeCard = (req, res) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
-    { $pull: { likes: _id } }, // убрать _id из массива
+    { $addToSet: { likes: req.user._id } },
     { new: true },
-  ).populate('owner').populate('likes')
-    .then((card) => {
-      if (card) {
-        res.send({ data: card });
+  )
+    .then((likeCard) => {
+      if (likeCard) {
+        res.send(likeCard);
       } else {
-        res.status(404).send({ message: `Карта с id ${req.params.cardId} не найдена!` });
+        res.status(404).send({ message: 'Карточка не найдена' });
       }
     })
     .catch((err) => {
-      if (err instanceof mongoose.Error.CastError) {
-        if (err.path === '_id') {
-          res.status(400).send({ message: `Передан некорректный идентификатор ${req.params.cardId}` });
-        } else {
-          res.status(400).send({ message: `Передан некорректный идентификатор ${_id}` });
-        }
+      if (err.name === 'CastError') {
+        res.status(400).send({ message: 'Переданы некорректные данные' });
+      } else {
+        res.status(500).send({ message: 'На сервере произошла ошибка' });
+      }
+    });
+};
+
+exports.dislikeCard = (req, res) => {
+  Card.findByIdAndUpdate(
+    req.params.cardId,
+    { $pull: { likes: req.user._id } },
+    { new: true },
+  )
+    .then((likeCard) => {
+      if (likeCard) {
+        res.send(likeCard);
+      } else {
+        res.status(404).send({ message: 'Карточка не найдена' });
+      }
+    })
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        res.status(400).send({ message: 'Переданы некорректные данные' });
       } else {
         res.status(500).send({ message: 'На сервере произошла ошибка' });
       }
