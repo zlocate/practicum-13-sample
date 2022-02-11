@@ -12,7 +12,7 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
   useFindAndModify: false,
 });
 
-app.use(bodyParser.json());
+app.use(express.json());
 app.use((req, res, next) => {
   req.user = {
     _id: '6086e31f2eb81830c4c27864',
