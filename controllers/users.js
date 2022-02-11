@@ -40,7 +40,7 @@ const createUser = async (req, res) => {
     const user = await User.create({
       id, name, about, avatar,
     });
-    res.send(user);
+    res.status(201).send(user);
   } catch (err) {
     if (err.name === 'CastError') {
       res.status(ERROR_CODE_USER).send({ message: message400 });

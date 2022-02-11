@@ -23,7 +23,7 @@ const createCard = async (req, res) => {
     const card = await Card.create({
       owner, name, link,
     });
-    res.send(card);
+    res.status(201).send(card);
   } catch (err) {
     if (err.name === 'CastError') {
       res.status(ERROR_CODE_USER).send({ message: message400 });
